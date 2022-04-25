@@ -1,4 +1,4 @@
-## Philosophers
+# Philosophers
 (project of school 21)
 
 "I never thought philosophy would be so deadly"
@@ -35,7 +35,7 @@ and, of course, while sleeping, they are not eating nor thinking.
 • No need to say that philosophers should avoid dying!
 
 
-# Global rules
+### Global rules
 
 You have to write a program for the mandatory part and another one for the bonus part (if you decide to do the bonus part). They both have to comply with the following rules:
 
@@ -82,7 +82,7 @@ Replace timestamp_in_ms with the current timestamp in milliseconds and X with th
 !!! Your program must not have any data races.
 
 
-# Mandatory part
+### Mandatory part
 
 The specific rules for the mandatory part are:
 
@@ -93,7 +93,7 @@ The specific rules for the mandatory part are:
 • To prevent philosophers from duplicating forks, you should protect the forks state with a mutex for each of them.
 
 
-# Bonus part
+### Bonus part
 
 The program of the bonus part takes the same arguments as the mandatory program. It has to comply with the requirements of the Global rules chapter.
 
