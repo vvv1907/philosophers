@@ -1,13 +1,15 @@
-# Philosophers
+## Philosophers
 (project of school 21)
 
 "I never thought philosophy would be so deadly"
+
 
 Summary:
 In this project, you will learn the basics of threading a process.
 You will see how to create threads and you will discover mutexes. 
 
 Version: 10
+
 
 Here are the things you need to know if you want to succeed this assignment:
 
@@ -32,7 +34,7 @@ and, of course, while sleeping, they are not eating nor thinking.
 
 • No need to say that philosophers should avoid dying!
 
-Global rules
+#Global rules
 
 You have to write a program for the mandatory part and another one for the bonus part (if you decide to do the bonus part). They both have to comply with the following rules:
 • Global variables are forbidden!
@@ -57,18 +59,26 @@ Replace timestamp_in_ms with the current timestamp in milliseconds and X with th
 • Again, philosophers should avoid dying!
 !!! Your program must not have any data races.
 
-Mandatory part
+#Mandatory part
 
 The specific rules for the mandatory part are:
+
 • Each philosopher should be a thread.
+
 • There is one fork between each pair of philosophers. Therefore, if there are several philosophers, each philosopher has a fork on their left side and a fork on their right side. If there is only one philosopher, there should be only one fork on the table.
+
 • To prevent philosophers from duplicating forks, you should protect the forks state with a mutex for each of them.
 
-Bonus part
+#Bonus part
 
 The program of the bonus part takes the same arguments as the mandatory program. It has to comply with the requirements of the Global rules chapter.
+
 The specific rules for the bonus part are:
+
 • All the forks are put in the middle of the table.
+
 • They have no states in memory but the number of available forks is represented by a semaphore.
+
 • Each philosopher should be a process. But the main process should not be a philosopher.
+
 !!! The bonus part will only be assessed if the mandatory part is PERFECT. Perfect means the mandatory part has been integrally done and works without malfunctioning. If you have not passed ALL the mandatory requirements, your bonus part will not be evaluated at all.
