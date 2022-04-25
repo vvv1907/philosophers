@@ -1,5 +1,5 @@
 # Philosophers
-project of school 21
+(project of school 21)
 
 "I never thought philosophy would be so deadly"
 
