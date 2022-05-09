@@ -57,14 +57,12 @@ long	time_stamp(t_data *data)
 {
 	long	result;
 
-	pthread_mutex_lock(&data->timer);
 	gettimeofday(&data->time->tv2, NULL);
 	data->time->dtv.tv_sec = data->time->tv2.tv_sec - \
 								data->time->tv1.tv_sec;
 	data->time->dtv.tv_usec = data->time->tv2.tv_usec - \
 								data->time->tv1.tv_usec;
 	result = data->time->dtv.tv_sec * 1000 + data->time->dtv.tv_usec / 1000;
-	pthread_mutex_unlock(&data->timer);
 	return (result);
 }
 
@@ -84,7 +82,7 @@ void	custom_usleep(int ms)
 
 void	print_status(t_philo *philo, char *status)
 {
-	pthread_mutex_lock(&philo->data->printer);
+	pthread_mutex_lock(&philo->data->check);
 	printf("%ld %d %s\n", time_stamp(philo->data), philo->id, status);
-	pthread_mutex_unlock(&philo->data->printer);
+	pthread_mutex_unlock(&philo->data->check);
 }

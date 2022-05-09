@@ -36,7 +36,7 @@ static int	data_init(int argc, char **argv, t_data *data, t_time *time)
 	data->time = time;
 	data->finish_flag = 0;
 	data->number_of_philo = philo_atoi(argv[1]);
-	if (data->number_of_philo <= 0 || data->number_of_philo > 200)
+	if (data->number_of_philo <= 0)
 		return (1);
 	data->time_to_die = philo_atoi(argv[2]);
 	if (data->time_to_die < 0)
@@ -60,21 +60,22 @@ static int	data_init(int argc, char **argv, t_data *data, t_time *time)
 
 static int	mutexes_init(t_data *data)
 {
-	int	i;
+	int				i;
+	pthread_mutex_t	*mutexes;
 
 	i = 0;
-	if (pthread_mutex_init(&data->checker, NULL))
-		return (philo_error("mutex was not initialized"));
-	if (pthread_mutex_init(&data->timer, NULL))
-		return (philo_error("mutex was not initialized"));
-	if (pthread_mutex_init(&data->printer, NULL))
-		return (philo_error("mutex was not initialized"));
+	mutexes = malloc(sizeof(pthread_mutex_t) * data->number_of_philo);
+	if (!mutexes)
+		return (philo_error("not allocation for mutexes"));
+	data->fork = mutexes;
 	while (i < data->number_of_philo)
 	{
 		if (pthread_mutex_init(&data->fork[i], NULL))
-			return (philo_error("mutex was not initialized"));
+			return (philo_error("fork_mutex was not initialized"));
 		i++;
 	}
+	if (pthread_mutex_init(&data->check, NULL))
+		return (philo_error("check_mutex was not initialized"));
 	return (0);
 }
 
@@ -82,6 +83,9 @@ static int	philo_init(t_data *data)
 {
 	int	i;
 
+	data->philo = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
+	if (!data->philo)
+		return (philo_error("not allocation for philo"));
 	i = 0;
 	while (i < data->number_of_philo)
 	{
@@ -104,10 +108,10 @@ static int	philo_init(t_data *data)
 int	initialization(int argc, char **argv, t_data *data, t_time *time)
 {
 	if (data_init(argc, argv, data, time))
-		return (2);
+		return (1);
 	if (mutexes_init(data))
-		return (3);
+		return (1);
 	if (philo_init(data))
-		return (4);
+		return (1);
 	return (0);
 }

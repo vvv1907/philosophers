@@ -14,13 +14,13 @@
 
 static void	taking_forks(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->checker);
+	pthread_mutex_lock(&philo->data->check);
 	if (philo->data->finish_flag || philo->number_of_eat == 0)
 	{
-		pthread_mutex_unlock(&philo->data->checker);
+		pthread_mutex_unlock(&philo->data->check);
 		return ;
 	}
-	pthread_mutex_unlock(&philo->data->checker);
+	pthread_mutex_unlock(&philo->data->check);
 	if (philo->max_id)
 	{
 		pthread_mutex_lock(philo->left_fork);
@@ -39,18 +39,16 @@ static void	taking_forks(t_philo *philo)
 
 static void	eating(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->checker);
+	pthread_mutex_lock(&philo->data->check);
 	if (philo->data->finish_flag || philo->number_of_eat == 0)
 	{
-		pthread_mutex_unlock(&philo->data->checker);
+		pthread_mutex_unlock(&philo->data->check);
 		return ;
 	}
-	pthread_mutex_unlock(&philo->data->checker);
-	print_status(philo, "is eating");
-	pthread_mutex_lock(&philo->data->checker);
 	philo->time_of_last_eat = time_stamp(philo->data);
 	philo->number_of_eat--;
-	pthread_mutex_unlock(&philo->data->checker);
+	pthread_mutex_unlock(&philo->data->check);
+	print_status(philo, "is eating");
 	custom_usleep(philo->data->time_to_eat);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
@@ -58,26 +56,26 @@ static void	eating(t_philo *philo)
 
 static void	sleeping(t_philo *philo)
 {	
-	pthread_mutex_lock(&philo->data->checker);
+	pthread_mutex_lock(&philo->data->check);
 	if (philo->data->finish_flag || philo->number_of_eat == 0)
 	{
-		pthread_mutex_unlock(&philo->data->checker);
+		pthread_mutex_unlock(&philo->data->check);
 		return ;
 	}
-	pthread_mutex_unlock(&philo->data->checker);
+	pthread_mutex_unlock(&philo->data->check);
 	print_status(philo, "is sleeping");
 	custom_usleep(philo->data->time_to_sleep);
 }
 
 static void	thinking(t_philo *philo)
 {	
-	pthread_mutex_lock(&philo->data->checker);
+	pthread_mutex_lock(&philo->data->check);
 	if (philo->data->finish_flag || philo->number_of_eat == 0)
 	{
-		pthread_mutex_unlock(&philo->data->checker);
+		pthread_mutex_unlock(&philo->data->check);
 		return ;
 	}
-	pthread_mutex_unlock(&philo->data->checker);
+	pthread_mutex_unlock(&philo->data->check);
 	print_status(philo, "is thinking");
 }
 

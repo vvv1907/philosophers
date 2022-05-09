@@ -19,8 +19,6 @@
 # include <pthread.h>
 # include <string.h>
 
-# define NUMBER 201
-
 typedef struct s_time
 {
 	struct timeval	tv1;
@@ -48,17 +46,16 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				optional_argument;
 	int				finish_flag;
-	pthread_mutex_t	printer;
-	pthread_mutex_t	checker;
-	pthread_mutex_t	timer;
-	pthread_mutex_t	fork[NUMBER];
-	t_philo			philo[NUMBER];
+	pthread_mutex_t	check;
+	pthread_mutex_t	*fork;
+	t_philo			*philo;
 	struct s_time	*time;
 }					t_data;
 
 int		initialization(int argc, char **argv, t_data *data, t_time *time);
 int		validation(int argc, char **argv);
 int		philo_error(char *str);
+int		monitor(t_data *data);
 long	time_stamp(t_data *data);
 void	custom_usleep(int ms);
 void	print_status(t_philo *philo, char *status);

@@ -14,10 +14,10 @@ NAME = philo
 NAME_BONUS = philo_bonus
 
 DIR = mandatory/
-FILES = utils.c	init.c	processing.c	main.c
+FILES =	init.c	main.c	monitor.c	processing.c	utils.c
 
 DIR_BONUS = bonus/
-FILES_BONUS = 
+FILES_BONUS = philosophers_main_bonus.c philosophers_semaphor_bonus.c philosophers_utils_bonus.c
 
 SRCS = $(addprefix $(DIR), $(FILES))
 SRCS_BONUS = $(addprefix $(DIR_BONUS), $(FILES_BONUS))
@@ -27,10 +27,10 @@ OBJS_BONUS = $(SRCS_BONUS:%.c=%.o)
 
 HEADER = includes/philo.h
 HEADER_BONUS = includes/philo_bonus.h
-INCLUDES = includes/
+INCLUDES = includes/philosophers_bonus.h
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -O2 #-fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -O2 -fsanitize=thread
 RM = rm -f
 
 .PHONY: all clean fclean re bonus
