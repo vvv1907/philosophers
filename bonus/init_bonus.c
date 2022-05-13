@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hcolumbu <hcolumbu@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../includes/philo_bonus.h"
 
 static int	philo_atoi(char *str)
 {
@@ -31,9 +31,11 @@ static int	philo_atoi(char *str)
 	return (result);
 }
 
-static int	data_init(int argc, char **argv, t_data *data, t_time *time)
+int	data_init(int argc, char **argv, t_data *data, t_time *time)
 {
 	data->time = time;
+	data->time_of_last_eat = 0;
+	data->id = 0;
 	data->finish_flag = 0;
 	data->number_of_philo = philo_atoi(argv[1]);
 	if (data->number_of_philo <= 0)
@@ -49,67 +51,32 @@ static int	data_init(int argc, char **argv, t_data *data, t_time *time)
 		return (1);
 	if (argc == 6)
 	{
-		data->optional_argument = philo_atoi(argv[5]);
-		if (data->optional_argument < 0)
+		data->number_of_eat = philo_atoi(argv[5]);
+		if (data->number_of_eat < 0)
 			return (1);
 	}
 	else
-		data->optional_argument = -1;
+		data->number_of_eat = -1;
 	return (0);
 }
 
-static int	mutexes_init(t_data *data)
+int	semaphores_init(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	data->fork = malloc(sizeof(pthread_mutex_t) * data->number_of_philo);
-	if (!data->fork)
-		return (philo_error("not allocation for mutexes"));
-	while (i < data->number_of_philo)
-	{
-		if (pthread_mutex_init(&data->fork[i], NULL))
-			return (philo_error("fork_mutex was not initialized"));
-		i++;
-	}
-	if (pthread_mutex_init(&data->check, NULL))
-		return (philo_error("check_mutex was not initialized"));
-	return (0);
-}
-
-static int	philo_init(t_data *data)
-{
-	int	i;
-
-	data->philo = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
-	if (!data->philo)
-		return (philo_error("not allocation for philo"));
-	i = 0;
-	while (i < data->number_of_philo)
-	{
-		data->philo[i].number_of_eat = data->optional_argument;
-		data->philo[i].time_of_last_eat = 0;
-		data->philo[i].max_id = 0;
-		data->philo[i].id = i + 1;
-		data->philo[i].data = data;
-		data->philo[i].left_fork = &data->fork[i];
-		if (i == 0)
-			data->philo[i].right_fork = &data->fork[data->number_of_philo - 1];
-		else
-			data->philo[i].right_fork = &data->fork[i - 1];
-		i++;
-	}
-	data->philo[data->number_of_philo - 1].max_id = 1;
-	return (0);
-}
-
-int	initialization(int argc, char **argv, t_data *data, t_time *time)
-{
-	if (data_init(argc, argv, data, time))
+	sem_unlink("/check");
+	sem_unlink("/fork");
+	sem_unlink("/stop");
+	sem_unlink("/eat");
+	data->check = sem_open("/check", O_CREAT, S_IRWXU, 1);
+	if (data->check == SEM_FAILED)
 		return (1);
-	if (mutexes_init(data))
+	data->fork = sem_open("/fork", O_CREAT, S_IRWXU, data->number_of_philo);
+	if (data->fork == SEM_FAILED)
 		return (1);
-	if (philo_init(data))
+	data->stop = sem_open("/stop", O_CREAT, S_IRWXU, 0);
+	if (data->stop == SEM_FAILED)
+		return (1);
+	data->eat = sem_open("/eat", O_CREAT, S_IRWXU, 0);
+	if (data->eat == SEM_FAILED)
 		return (1);
 	return (0);
 }

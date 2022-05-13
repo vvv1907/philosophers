@@ -35,7 +35,6 @@ static int	destroy_mutexes(t_data *data)
 			return (1);
 		i++;
 	}
-	pthread_mutex_unlock(&data->check);
 	if (pthread_mutex_destroy(&data->check))
 		return (1);
 	return (0);
